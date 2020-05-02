@@ -21,4 +21,8 @@ int main(int argc, char *argv[])
 	auto res = decrypt_single_byte_xor("1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736");
 	cout << "Exercise 3 result: " << res << "\n";
 
+	/* Ex 4 */
+	res = find_single_byte_xor("set1/data/q4.txt");
+	cout << "Exercise 4 result: " << res << "\n";
+
 }

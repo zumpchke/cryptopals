@@ -36,12 +36,12 @@ static unordered_map<char, double> freqs{
 };
 constexpr double lowest_double = std::numeric_limits<double>::lowest();
 
-static double score_string(unsigned char *arr, size_t sz)
+double score_string(unsigned char *arr, size_t sz)
 {
 	auto sum = 0.0;
 	for(int i =0; i < sz; i++) {
 		if (freqs.find(arr[i]) != freqs.end()) {
-			sum += freqs[arr[i]];
+			sum += freqs[std::tolower(arr[i])];
 		}
 	}
 	return sum;
