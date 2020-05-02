@@ -23,10 +23,8 @@ void get_bits(uint8_t *buf, uint8_t *out)
 	/* Last 4 bits of 2nd byte | First two bits of 3rd byte */
 	out[2] = (buf[1] & 0b00001111) << 2 | ((buf[2] & 0b11000000) >> 6);
 	out[3] = (buf[2] & 0b00111111);
-	
 }
 
-	
 void hex_to_bytes(const char *input_str, size_t sz, uint8_t *bytes) {
 	assert(sz % 2 == 0);
 
