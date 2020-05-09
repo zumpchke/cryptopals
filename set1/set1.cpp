@@ -50,5 +50,18 @@ int main(int argc, char *argv[])
 
 	repeating_xor((uint8_t *)test1, strlen(test1), "ICE", 3, tmp1);
 	assert(!memcmp(hex1, tmp1, strlen(test1)));
-	cout << "Exercise 5: passed\n" << "\n";
+	cout << "Exercise 5: passed" << "\n";
+
+	/* Ex 6 */
+
+	//auto lines = read_file("set1/data/q4.txt");
+
+	int c = hamming("this is a test", "wokka wokka!!!");
+	assert(c == 37);
+	cout << "Exercise 6: passed" << "\n";
+
+
+
+
+
 }

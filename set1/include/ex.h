@@ -1,6 +1,9 @@
 #include <string>
 #include <cstdint>
 #include <cstddef>
+#include <iostream>
+#include <fstream>
+#include <vector>
 
 using namespace std;
 
@@ -23,3 +26,7 @@ string find_single_byte_xor(string filename);
 void repeating_xor(uint8_t *data, size_t sz, const char *key, size_t key_sz,
 	uint8_t *output_data);
 
+
+/* Exercise 6 */
+vector<string> read_file(string filename);
+int hamming(string a, string b);
