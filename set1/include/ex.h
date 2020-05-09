@@ -18,3 +18,8 @@ string decrypt_single_byte_xor(string input);
 
 /* Exercise 4 */
 string find_single_byte_xor(string filename);
+
+/* Exercise 5 */
+void repeating_xor(uint8_t *data, size_t sz, const char *key, size_t key_sz,
+	uint8_t *output_data);
+
