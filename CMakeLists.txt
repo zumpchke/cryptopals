@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.4)
+add_compile_options(-Wall -Werror)
 project(CryptoPals VERSION 1.0
 		   DESCRIPTION "CryptoPals Exercises"
 		   LANGUAGES CXX)

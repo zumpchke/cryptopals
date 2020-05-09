@@ -1,17 +1,23 @@
 #include <cstring>
 #include <iostream>
+#include <cassert>
 #include <ex.h>
 
 using namespace std;
 
-const char input_str[] = "49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d";
+const char *input_str = "66" "6f" "6f" "62" "61" "72";
+
+const char *test_strs[] = {"Zg==", "Zm8=", "Zm9v", "Zm9vYg==", "Zm9vYmE=", "Zm9vYmFy"};
 
 int main(int argc, char *argv[])
 {
 	/* Ex 1 */
-	uint8_t bytes[strlen(input_str)/2] = {0};
-	string b64 = convert_to_b64((const char *)input_str, strlen(input_str), (uint8_t *)bytes);
-	cout << b64 << endl;
+	assert(strlen(input_str) % 2 == 0);
+	uint8_t bytes[(strlen(input_str)/2) + 1] = {0};
+	for(unsigned int j = 2; j <= strlen(input_str); j += 2) {
+		string b64 = convert_to_b64((const char *)input_str, j, (uint8_t *)bytes);
+		assert(b64 == test_strs[j / 2 - 1]);
+	}
 
 	/* Ex 2 */
 	fixed_xor("1c0111001f010100061a024b53535009181c",

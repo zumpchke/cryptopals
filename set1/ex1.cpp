@@ -13,16 +13,22 @@ static std::string base64_chars =
              "??"; // These two question marks will be replaced based on the value of url in base64_encode
 
 
-void get_bits(uint8_t *buf, uint8_t *out)
+int get_bits(uint8_t *buf, uint8_t *out, int index)
 {
 	/* First 6 bits */
-	out[0] = (buf[0] & (0b11111100)) >> 2;
-	/* Last 2 bits of first byte | First 4 bits of second byte */
-	out[1] = (buf[0] & (0b11)) << 4 | (buf[1] & 0b11110000) >> 4;
-
-	/* Last 4 bits of 2nd byte | First two bits of 3rd byte */
-	out[2] = (buf[1] & 0b00001111) << 2 | ((buf[2] & 0b11000000) >> 6);
-	out[3] = (buf[2] & 0b00111111);
+	if (index == 0) {
+		return (buf[0] & (0b11111100)) >> 2;
+	} else if (index == 1) {
+		/* Last 2 bits of first byte | First 4 bits of second byte */
+		return (buf[0] & (0b11)) << 4 | (buf[1] & 0b11110000) >> 4;
+	} else if (index == 2) {
+		/* Last 4 bits of 2nd byte | First two bits of 3rd byte */
+		return (buf[1] & 0b00001111) << 2 | ((buf[2] & 0b11000000) >> 6);
+	} else if (index ==3) {
+		return (buf[2] & 0b00111111);
+	} else {
+		assert(0);
+	}
 }
 
 void hex_to_bytes(const char *input_str, size_t sz, uint8_t *bytes) {
@@ -30,7 +36,7 @@ void hex_to_bytes(const char *input_str, size_t sz, uint8_t *bytes) {
 
 	size_t i = 0;
 	for(; i < (sz / 2); i++) {
-		sscanf(input_str + 2 * i, "%02x", &bytes[i]);
+		sscanf(input_str + 2 * i, "%02x", (unsigned int *)&bytes[i]);
 	}
 }
 
@@ -39,17 +45,42 @@ string convert_to_b64(const char *input_str, size_t sz, uint8_t *bytes)
 {
 	/* Input is a hex string! */
 	hex_to_bytes(input_str, sz, bytes);
-	assert(sz % 3 == 0);
 	/* Base64 - 3 bytes are turned into 4 B64 chars */
 	string out_str{};
-	for(int i = 0; i < sz / 2; i += 3) {
-		uint8_t out[4] = {0};
-		get_bits(bytes + i, out);
-		out_str += base64_chars[out[0]];
-		out_str += base64_chars[out[1]];
-		out_str += base64_chars[out[2]];
-		out_str += base64_chars[out[3]];
+	assert(sz % 2 == 0);
+
+	auto idx = 0;
+	int i = 0;
+	int n = sz/2;
+	while (i < n) {
+		idx = get_bits(bytes, NULL, 0);
+		out_str += base64_chars[idx];
+
+		if (i + 1 < n) {
+			idx = get_bits(bytes, NULL, 1);
+			out_str += base64_chars[idx];
+
+			if (i + 2 < n) {
+				idx = get_bits(bytes, NULL, 2);
+				out_str += base64_chars[idx];
+				idx = get_bits(bytes, NULL, 3);
+				out_str += base64_chars[idx];
+			} else {
+				idx = get_bits(bytes, NULL, 2);
+				out_str += base64_chars[idx];
+				out_str += '=';
+			}
+		} else {
+			idx = get_bits(bytes, NULL, 1);
+			out_str += base64_chars[idx];
+			out_str += '=';
+			out_str += '=';
+		}
+
+		bytes += 3;
+		i += 3;
 	}
+
 	return out_str;
 
 }

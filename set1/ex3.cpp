@@ -39,7 +39,7 @@ constexpr double lowest_double = std::numeric_limits<double>::lowest();
 double score_string(unsigned char *arr, size_t sz)
 {
 	auto sum = 0.0;
-	for(int i =0; i < sz; i++) {
+	for(unsigned int i = 0; i < sz; i++) {
 		if (freqs.find(arr[i]) != freqs.end()) {
 			sum += freqs[std::tolower(arr[i])];
 		}
@@ -60,7 +60,7 @@ string decrypt_single_byte_xor(string input)
 
 	/* For every character */
 	for (unsigned char chr = 0; chr < UINT8_MAX; chr++) {
-		for (int i = 0; i < n/2; i++) {
+		for (unsigned int i = 0; i < n/2; i++) {
 			bytes[i] ^= chr;
 		}
 		auto s = score_string(bytes, n/2);
@@ -70,7 +70,7 @@ string decrypt_single_byte_xor(string input)
 			final_chr = chr;
 		}
 		/* Reset */
-		for (int i = 0; i < n/2; i++) {
+		for (unsigned int i = 0; i < n/2; i++) {
 			bytes[i] ^= chr;
 		}
 	}

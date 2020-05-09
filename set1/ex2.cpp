@@ -13,11 +13,11 @@ void fixed_xor(string buf1, string buf2) {
 	hex_to_bytes(buf1.c_str(), n, bb1);
 	hex_to_bytes(buf2.c_str(), n, bb2);
 
-	for(int i =0; i < n/2; i++) {
+	for(unsigned int i = 0; i < n/2; i++) {
 		bb1[i] ^= bb2[i];
 	}
 
-	for(int i = 0; i < n/2; i++) {
+	for(unsigned int i = 0; i < n/2; i++) {
 		cout << std::hex << int(bb1[i]);
 	}
 	cout << "\n";
