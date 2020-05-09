@@ -82,5 +82,73 @@ string convert_to_b64(const char *input_str, size_t sz, uint8_t *bytes)
 	}
 
 	return out_str;
+}
 
+
+/* From Rosetta Code */
+int findIndex(unsigned char val) 
+{
+	if ('A' <= val && val <= 'Z') {
+		return val - 'A';
+	}
+
+	if ('a' <= val && val <= 'z') {
+		return val - 'a' + 26;
+	}
+
+	if ('0' <= val && val <= '9') {
+		return val - '0' + 52;
+	}
+
+	if ('+' == val) {
+		return 62;
+	}
+
+	if ('/' == val) {
+		return 63;
+	}
+
+	assert(0);
+}
+
+
+void b64_to_bytes(const char *input_str, size_t sz, uint8_t *output_bytes)
+{
+	unsigned int i = 0, j = 0;;
+	assert(sz >= 4);
+	assert(sz % 4 == 0);
+	while (i < sz) {
+		auto b1 = input_str[i];
+		auto b2 = input_str[i+1];
+		auto b3 = input_str[i+2];
+		auto b4 = input_str[i+3];
+		
+		auto i1 = findIndex(b1);
+		auto i2 = findIndex(b2);
+		uint8_t acc;
+		
+		acc = i1 << 2;
+		acc |= i2 >> 4;
+
+		output_bytes[j++] = acc;
+		if (b3 != '=') {
+			auto i3 = findIndex(b3);
+			
+			acc = (i2 & 0xF) << 4;
+			acc |= i3 >> 2;
+
+			output_bytes[j++] = acc;
+
+			if (b4 != '=') {
+				auto i4 = findIndex(b4);
+
+				acc = (i3 & 0x3) << 6;
+				acc |= i4;
+
+				output_bytes[j++] = acc;
+			}
+		}
+		i += 4;
+
+	}
 }

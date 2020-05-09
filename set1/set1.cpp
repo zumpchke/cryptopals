@@ -19,6 +19,10 @@ int main(int argc, char *argv[])
 		assert(b64 == test_strs[j / 2 - 1]);
 	}
 
+	uint8_t output_bytes[20] = {0};
+	b64_to_bytes((const char *)test_strs[5], strlen(test_strs[5]), output_bytes);
+	assert(!strcmp((const char *)output_bytes, "foobar"));
+
 	/* Ex 2 */
 	fixed_xor("1c0111001f010100061a024b53535009181c",
 		"686974207468652062756c6c277320657965");
