@@ -59,7 +59,21 @@ int main(int argc, char *argv[])
 		auto key_data = read_file("set1/data/q6.txt");
 		uint8_t key_bytes[key_data.size()] = {0};
 		auto data_len = b64_to_bytes(key_data.c_str(), key_data.size(), key_bytes);
-		int res = get_key_size(key_bytes, data_len);
-		printf("key size = %d\n", res);
+		int key_size = get_key_size(key_bytes, data_len);
+		assert(key_size == 29);
+
+		auto chunks = break_data_into_chunks(key_bytes, data_len, key_size);
+		auto transposed_chunks = transpose_chunks(chunks, (size_t)key_size);
+
+		assert(chunks[0].size() == (unsigned int)key_size);
+		vector<uint8_t> key = score_chunks(transposed_chunks);
+
+		uint8_t output[data_len] = {0};
+		repeating_xor(key_bytes, data_len, (const char *) key.data(), key_size, output);
+
+		for(int i = 0; i < data_len; i++) {
+			printf("%c", output[i]);
+		}
+		printf("\n");
 	}
 }

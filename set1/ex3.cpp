@@ -34,7 +34,7 @@ static unordered_map<char, double> freqs{
 	{'z', 0.00074},
 	{' ', 0.13000}
 };
-constexpr double lowest_double = std::numeric_limits<double>::lowest();
+static constexpr double lowest_double = std::numeric_limits<double>::lowest();
 
 double score_string(unsigned char *arr, size_t sz)
 {

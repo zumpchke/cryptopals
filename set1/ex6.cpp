@@ -78,3 +78,68 @@ int get_key_size(uint8_t *data, size_t sz)
 
 	return edit_distances[0].first;
 }
+
+vector<vector<uint8_t>> break_data_into_chunks(uint8_t *data, size_t data_len,
+	size_t key_size)
+{
+	vector<vector<uint8_t>> res;
+
+	for(unsigned int i = 0; i < data_len / key_size; i++) {
+		vector<uint8_t> chunk;
+		for(unsigned int j = 0; j < key_size; j++) {
+			chunk.push_back(data[i*key_size + j]);
+		}
+		res.push_back(chunk);
+	}
+	return res;
+}
+
+vector<vector<uint8_t>> transpose_chunks(vector<vector<uint8_t>>& chunks,
+	size_t key_size)
+{
+	vector<vector<uint8_t>> transposed;
+
+	for(unsigned int i = 0; i < key_size; i++) {
+		vector<uint8_t> t;
+		for(auto& c: chunks) {
+			t.push_back(c[i]);
+		}
+		transposed.push_back(t);
+	}
+	return transposed;
+}
+
+static constexpr double lowest_double = std::numeric_limits<double>::lowest();
+vector<uint8_t> score_chunks(vector<vector<uint8_t>>& chunks)
+{
+
+	vector<uint8_t> key(chunks[0].size(), 0);
+	// For every chunk, a single byte is the correct key!
+	for(auto it = chunks.begin(); it != chunks.end(); it++) {
+		auto c = *it;
+		auto score = lowest_double;
+		uint8_t *data = c.data();
+		// For every char
+		for(unsigned char chr = 0; chr < UINT8_MAX; chr++) {
+
+			// Xor it.
+			for(unsigned int i = 0; i < c.size(); i++) {
+				data[i] ^= chr;
+			}
+
+			// Score it.
+			auto s = score_string(data, c.size());
+			if (s > score) {
+				score = s;
+				key[std::distance(chunks.begin(), it)] = chr;
+			}
+
+			/* Reset */
+			for(unsigned int i = 0; i < c.size(); i++) {
+				data[i] ^= chr;
+			}
+		}
+	}
+
+	return key;
+}
