@@ -112,7 +112,7 @@ int findIndex(unsigned char val)
 }
 
 
-void b64_to_bytes(const char *input_str, size_t sz, uint8_t *output_bytes)
+int b64_to_bytes(const char *input_str, size_t sz, uint8_t *output_bytes)
 {
 	unsigned int i = 0, j = 0;;
 	assert(sz >= 4);
@@ -151,4 +151,5 @@ void b64_to_bytes(const char *input_str, size_t sz, uint8_t *output_bytes)
 		i += 4;
 
 	}
+	return j - 1;
 }

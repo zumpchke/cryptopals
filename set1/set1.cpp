@@ -3,8 +3,7 @@
 #include <cassert>
 #include <ex.h>
 
-using namespace std;
-
+using namespace std; 
 const char *input_str = "66" "6f" "6f" "62" "61" "72";
 
 const char *test_strs[] = {"Zg==", "Zm8=", "Zm9v", "Zm9vYg==", "Zm9vYmE=", "Zm9vYmFy"};
@@ -53,15 +52,14 @@ int main(int argc, char *argv[])
 	cout << "Exercise 5: passed" << "\n";
 
 	/* Ex 6 */
+	{
+		int c = hamming("this is a test", "wokka wokka!!!");
+		assert(c == 37);
 
-	//auto lines = read_file("set1/data/q4.txt");
-
-	int c = hamming("this is a test", "wokka wokka!!!");
-	assert(c == 37);
-	cout << "Exercise 6: passed" << "\n";
-
-
-
-
-
+		auto key_data = read_file("set1/data/q6.txt");
+		uint8_t key_bytes[key_data.size()] = {0};
+		auto data_len = b64_to_bytes(key_data.c_str(), key_data.size(), key_bytes);
+		int res = get_key_size(key_bytes, data_len);
+		printf("key size = %d\n", res);
+	}
 }
