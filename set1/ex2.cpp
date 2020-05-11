@@ -17,8 +17,5 @@ void fixed_xor(string buf1, string buf2) {
 		bb1[i] ^= bb2[i];
 	}
 
-	for(unsigned int i = 0; i < n/2; i++) {
-		cout << std::hex << int(bb1[i]);
-	}
 	cout << "\n";
 }

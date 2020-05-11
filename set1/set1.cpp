@@ -75,5 +75,16 @@ int main(int argc, char *argv[])
 			printf("%c", output[i]);
 		}
 		printf("\n");
+
+	}
+
+	/* Ex 7 */
+	{
+		string data = read_file("set1/data/q7.txt");
+		uint8_t output[data.size()] = {0};
+		int data_len = b64_to_bytes(data.c_str(), data.size(), output);
+		uint8_t pt[data_len + 1024] = {0};
+
+		run_aes(output, data_len + 1, pt);
 	}
 }
