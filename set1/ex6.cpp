@@ -1,25 +1,5 @@
 #include <ex.h>
 #include <algorithm>
-#include <cassert>
-
-string read_file(string filename)
-{
-	string res;
-	ifstream f(filename);
-
-	if (f.is_open()) {
-		while (f.good()) {
-			string line;
-			getline(f, line);
-			res += line;
-		}
-		f.close();
-	} else {
-		assert(0);
-	}
-
-	return res;
-}
 
 int hamming(string a, string b)
 {

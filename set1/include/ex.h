@@ -4,6 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <cassert>
 
 using namespace std;
 
@@ -28,7 +29,34 @@ void repeating_xor(uint8_t *data, size_t sz, const char *key, size_t key_sz,
 
 
 /* Exercise 6 */
-string read_file(string filename);
+template
+<typename T>
+T inline read_file(string filename)
+{
+	T res;
+	ifstream f(filename);
+
+	if (f.is_open()) {
+		while (f.good()) {
+			string line;
+			getline(f, line);
+
+			if constexpr(std::is_same_v<T, std::string>) {
+				res += line;
+			} else if constexpr(std::is_same_v<T, vector<std::string>>) {
+				res.push_back(line);
+			} else {
+				assert(0);
+			}
+		}
+		f.close();
+	} else {
+		assert(0);
+	}
+
+	return res;
+}
+
 int hamming(string a, string b);
 int get_key_size(uint8_t *data, size_t len);
 vector<vector<uint8_t>> break_data_into_chunks(uint8_t *data, size_t data_len,
@@ -39,3 +67,6 @@ vector<uint8_t> score_chunks(vector<vector<uint8_t>>& chunks);
 
 /* Exercise 7 */
 int run_aes(uint8_t *encrypted_data, size_t sz, uint8_t *plaintext);
+
+/* Exercise 8 */
+int detect_aes(vector<string> data);

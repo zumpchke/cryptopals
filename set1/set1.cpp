@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
 		int c = hamming("this is a test", "wokka wokka!!!");
 		assert(c == 37);
 
-		auto key_data = read_file("set1/data/q6.txt");
+		string key_data = read_file<std::string>("set1/data/q6.txt");
 		uint8_t key_bytes[key_data.size()] = {0};
 		auto data_len = b64_to_bytes(key_data.c_str(), key_data.size(), key_bytes);
 		int key_size = get_key_size(key_bytes, data_len);
@@ -80,11 +80,19 @@ int main(int argc, char *argv[])
 
 	/* Ex 7 */
 	{
-		string data = read_file("set1/data/q7.txt");
+		string data = read_file<std::string>("set1/data/q7.txt");
 		uint8_t output[data.size()] = {0};
 		int data_len = b64_to_bytes(data.c_str(), data.size(), output);
 		uint8_t pt[data_len + 1024] = {0};
 
 		run_aes(output, data_len + 1, pt);
+	}
+
+	/* Ex 8 */
+	{
+		auto data = read_file<vector<std::string>>("set1/data/q8.txt");
+		auto line = detect_aes(data);
+		assert(line == 132);
+		cout << "AES ECB Line " << line << "\n";
 	}
 }

@@ -122,18 +122,18 @@ int b64_to_bytes(const char *input_str, size_t sz, uint8_t *output_bytes)
 		auto b2 = input_str[i+1];
 		auto b3 = input_str[i+2];
 		auto b4 = input_str[i+3];
-		
+
 		auto i1 = findIndex(b1);
 		auto i2 = findIndex(b2);
 		uint8_t acc;
-		
+
 		acc = i1 << 2;
 		acc |= i2 >> 4;
 
 		output_bytes[j++] = acc;
 		if (b3 != '=') {
 			auto i3 = findIndex(b3);
-			
+
 			acc = (i2 & 0xF) << 4;
 			acc |= i3 >> 2;
 
