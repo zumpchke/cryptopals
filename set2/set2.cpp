@@ -43,7 +43,25 @@ int main(int argc, char *argv[])
 			(const char *) "YELLOW SUBMARINE", iv);
 		std::string newstr(orig_data.begin(), orig_data.end());
 		assert(newstr == s);
+
+		// Decrypt intelligible data.
+
+		std::string file_data = read_file<std::string>("set1/data/q10.txt");
+		vector<uint8_t> bytes(file_data.size());
+
+		auto data_len = b64_to_bytes(file_data.c_str(),
+			file_data.size(), bytes.data());
+
+		vector<uint8_t> decode;
+		// XXX why data_len + 1?
+		aes_cbc_decrypt(bytes, data_len + 1, decode,
+			(const char *) "YELLOW SUBMARINE", iv);
+
+		std::string decodestr(decode.begin(), decode.end());
+		cout << decodestr << "\n";
+
 	}
+
 
 	return 0;
 }
