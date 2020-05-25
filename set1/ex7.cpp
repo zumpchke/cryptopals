@@ -41,6 +41,7 @@ int run_aes(uint8_t *encrypted_data, size_t sz, uint8_t *plaintext)
 	return pt_len;
 }
 
+#define BLOCK_SIZE	(16)
 void aes_encrypt_block(uint8_t *plaintext, unsigned char *key, uint8_t *output)
 {
 	EVP_CIPHER_CTX *ctx;
@@ -58,7 +59,32 @@ void aes_encrypt_block(uint8_t *plaintext, unsigned char *key, uint8_t *output)
 		assert(0);
 	}
 
-	if (EVP_EncryptUpdate(ctx, output, &len, plaintext, 16) != 1) {
+	if (EVP_EncryptUpdate(ctx, output, &len, plaintext, BLOCK_SIZE) != 1) {
+		assert(0);
+	}
+
+	EVP_CIPHER_CTX_free(ctx);
+}
+
+void aes_decrypt_block(uint8_t *ciphertext, unsigned char *key, uint8_t *output)
+{
+	EVP_CIPHER_CTX *ctx;
+
+	if (!(ctx = EVP_CIPHER_CTX_new())) {
+		assert(0);
+	}
+
+	int len;
+
+	const EVP_CIPHER *cipher = EVP_aes_128_ecb();
+	ERR_load_crypto_strings();
+	EVP_CIPHER_CTX_set_padding(ctx, 0);
+
+	if (EVP_DecryptInit_ex(ctx, cipher, NULL, key, NULL) != 1) {
+		assert(0);
+	}
+
+	if (EVP_DecryptUpdate(ctx, output, &len, ciphertext, BLOCK_SIZE) != 1) {
 		assert(0);
 	}
 

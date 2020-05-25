@@ -28,7 +28,8 @@ int main(int argc, char *argv[])
 
 		vector<uint8_t> out;
 
-		aes_cbc_encrypt(data, s.size(), out, (const char *)"YELLOW SUBMARINE", iv);
+		aes_cbc_encrypt(data, s.size(), out,
+			(const char *)"YELLOW SUBMARINE", iv);
 		cout << out.size() << "\n";
 
 		for (auto& c : out) {
@@ -36,6 +37,12 @@ int main(int argc, char *argv[])
 		}
 		printf("\n");
 
+		vector<uint8_t> orig_data;
+
+		aes_cbc_decrypt(out, out.size(), orig_data,
+			(const char *) "YELLOW SUBMARINE", iv);
+		std::string newstr(orig_data.begin(), orig_data.end());
+		assert(newstr == s);
 	}
 
 	return 0;

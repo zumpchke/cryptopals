@@ -22,14 +22,18 @@ int aes_cbc_encrypt(vector<uint8_t> plaintext, size_t sz,
 
 	assert(sz >= BLOCK_SIZE);
 	unsigned int i = 0;
-	// Align
-	auto working_size = (plaintext.size() +
-		(BLOCK_SIZE - 1)) & ~(BLOCK_SIZE - 1);
-	pkcs_pad(plaintext, working_size);
+
+	unsigned int working_size = 0;
+	if (plaintext.size() % BLOCK_SIZE == 0) {
+		pkcs_pad(plaintext, plaintext.size() + BLOCK_SIZE);
+	} else {
+		working_size = (plaintext.size() +
+			(BLOCK_SIZE - 1)) & ~(BLOCK_SIZE - 1);
+		pkcs_pad(plaintext, working_size);
+	}
 
 	working_data.resize(working_size);
 	assert(working_data.size() >= plaintext.size());
-	cout << plaintext.size() << "\n";
 
 	vector<uint8_t>::iterator start, work_start, iv_start;
 	for(;i < working_size / BLOCK_SIZE; i++) {
@@ -45,5 +49,30 @@ int aes_cbc_encrypt(vector<uint8_t> plaintext, size_t sz,
 	return 0;
 }
 
+int aes_cbc_decrypt(vector<uint8_t>& ciphertext, size_t sz,
+	vector<uint8_t>& plaintext, const char *key, uint8_t *iv)
+{
+	assert(ciphertext.size() % BLOCK_SIZE == 0);
 
+	plaintext.resize(ciphertext.size());
 
+	vector<uint8_t>::iterator start, output_start, iv_start;
+	unsigned int i = 0;
+
+	for(; i < sz / BLOCK_SIZE; i++) {
+		start = ciphertext.begin() + i * BLOCK_SIZE;
+		output_start = plaintext.begin() + i * BLOCK_SIZE;
+		iv_start = ciphertext.begin() + (i - 1) * BLOCK_SIZE;
+
+		aes_decrypt_block(&(*start), (unsigned char *) key,
+			&(*output_start));
+
+		xor_block(output_start, i == 0 ? iv : &(*iv_start));
+	}
+	auto pad = int(plaintext.back());
+	assert(pad < BLOCK_SIZE);
+
+	plaintext.resize(ciphertext.size() - pad);
+
+	return 0;
+}

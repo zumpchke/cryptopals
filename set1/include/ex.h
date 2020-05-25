@@ -71,3 +71,5 @@ int run_aes(uint8_t *encrypted_data, size_t sz, uint8_t *plaintext);
 /* Exercise 8 */
 int detect_aes(vector<string> data);
 void aes_encrypt_block(uint8_t *plaintext, unsigned char *key, uint8_t *output);
+void aes_decrypt_block(uint8_t *ciphertext, unsigned char *key, uint8_t *output);
+
