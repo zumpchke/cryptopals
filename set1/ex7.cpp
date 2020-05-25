@@ -40,3 +40,27 @@ int run_aes(uint8_t *encrypted_data, size_t sz, uint8_t *plaintext)
 
 	return pt_len;
 }
+
+void aes_encrypt_block(uint8_t *plaintext, unsigned char *key, uint8_t *output)
+{
+	EVP_CIPHER_CTX *ctx;
+
+	if (!(ctx = EVP_CIPHER_CTX_new())) {
+		assert(0);
+	}
+	int len;
+
+	const EVP_CIPHER *cipher = EVP_aes_128_ecb();
+	ERR_load_crypto_strings();
+	EVP_CIPHER_CTX_set_padding(ctx, 0);
+
+	if (EVP_EncryptInit_ex(ctx, cipher, NULL, key, NULL) != 1) {
+		assert(0);
+	}
+
+	if (EVP_EncryptUpdate(ctx, output, &len, plaintext, 16) != 1) {
+		assert(0);
+	}
+
+	EVP_CIPHER_CTX_free(ctx);
+}

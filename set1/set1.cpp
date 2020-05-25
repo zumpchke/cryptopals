@@ -3,7 +3,7 @@
 #include <cassert>
 #include <ex.h>
 
-using namespace std; 
+using namespace std;
 const char *input_str = "66" "6f" "6f" "62" "61" "72";
 
 const char *test_strs[] = {"Zg==", "Zm8=", "Zm9v", "Zm9vYg==", "Zm9vYmE=", "Zm9vYmFy"};
