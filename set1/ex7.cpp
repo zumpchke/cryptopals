@@ -5,9 +5,11 @@
 
 // Reference: https://wiki.openssl.org/index.php/EVP_Symmetric_Encryption_and_Decryption
 
-int run_aes(uint8_t *encrypted_data, size_t sz, uint8_t *plaintext)
+int run_aes(uint8_t *encrypted_data, size_t sz, uint8_t *plaintext, const unsigned char *key)
 {
-	const unsigned char *key = (const unsigned char *) "YELLOW SUBMARINE";
+	if (!key) {
+		key = (const unsigned char *) "YELLOW SUBMARINE";
+	}
 	int len;
 	int pt_len = 0;
 

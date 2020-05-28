@@ -41,7 +41,10 @@ int aes_cbc_encrypt(vector<uint8_t> plaintext, size_t sz,
 		work_start = working_data.begin() + i * BLOCK_SIZE;
 		iv_start = working_data.begin() + (i - 1) * BLOCK_SIZE;
 
-		xor_block(start, i == 0 ? iv : &(*iv_start));
+		/* ECB mode */
+		if (iv != nullptr) {
+			xor_block(start, i == 0 ? iv : &(*iv_start));
+		}
 		aes_encrypt_block(&(*start),
 			(unsigned char *)key, &(*work_start));
 	}

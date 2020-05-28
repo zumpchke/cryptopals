@@ -62,6 +62,16 @@ int main(int argc, char *argv[])
 
 	}
 
+	/* Ex 3 */
+	{
+		for (auto i = 0; i < 100; i++) {
+			vector<uint8_t> v(43, 0xA);
+			vector<uint8_t> ciphertext;
+			auto mode = encrypt_ecb_cbc(v, ciphertext);
+			auto res = oracle(ciphertext);
+			assert(mode == res);
+		}
+	}
 
 	return 0;
 }

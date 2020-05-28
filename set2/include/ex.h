@@ -8,3 +8,11 @@ int aes_cbc_encrypt(vector<uint8_t> plaintext, size_t sz, vector<uint8_t>& ciphe
 	const char *key, uint8_t *iv);
 int aes_cbc_decrypt(vector<uint8_t>& ciphertext, size_t sz,
 	vector<uint8_t>& plaintext, const char *key, uint8_t *iv);
+
+
+/* Ex 3 */
+vector<uint8_t> get_random_bytes(size_t sz);
+/* Encrypt AES or CBC randomly */
+int encrypt_ecb_cbc(vector<uint8_t> plaintext, vector<uint8_t>& ciphertext);
+
+int oracle(vector<uint8_t>& ciphertext);

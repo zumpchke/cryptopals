@@ -66,7 +66,7 @@ vector<vector<uint8_t>> transpose_chunks(vector<vector<uint8_t>>& chunks,
 vector<uint8_t> score_chunks(vector<vector<uint8_t>>& chunks);
 
 /* Exercise 7 */
-int run_aes(uint8_t *encrypted_data, size_t sz, uint8_t *plaintext);
+int run_aes(uint8_t *encrypted_data, size_t sz, uint8_t *plaintext, const unsigned char *key = NULL);
 
 /* Exercise 8 */
 int detect_aes(vector<string> data);
