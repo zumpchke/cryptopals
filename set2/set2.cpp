@@ -1,8 +1,15 @@
 #include <iostream>
 #include <ex.h>
 #include <cassert>
+#include <cstring>
 
 using namespace std;
+
+const char *ex4_str =
+"Um9sbGluJyBpbiBteSA1LjAKV2l0aCBteSByYWctdG9wIGRvd24gc28gbXkg"
+"aGFpciBjYW4gYmxvdwpUaGUgZ2lybGllcyBvbiBzdGFuZGJ5IHdhdmluZyBq"
+"dXN0IHRvIHNheSBoaQpEaWQgeW91IHN0b3A/IE5vLCBJIGp1c3QgZHJvdmUg"
+"YnkK";
 
 int main(int argc, char *argv[])
 {
@@ -71,6 +78,31 @@ int main(int argc, char *argv[])
 			auto res = oracle(ciphertext);
 			assert(mode == res);
 		}
+	}
+
+	/*  Ex 4 */
+	{
+		std::vector<uint8_t> input_data(strlen(ex4_str));
+		assert(input_data.size() == strlen(ex4_str));
+
+		auto key = get_random_bytes(16);
+		key[15] = '\0';
+		vector<uint8_t> ciphertext;
+
+		auto sz = b64_to_bytes((const char *) ex4_str, strlen(ex4_str),
+			input_data.data());
+		input_data.resize(sz + 1); // FIXME
+
+		auto bs = determine_block_size();
+		assert(bs == 16);
+
+		vector<uint8_t> prefix{};
+
+		prefix.insert(prefix.end(), input_data.begin(),
+			input_data.end());
+
+		aes_encrypt_ecb(prefix, key.data(), ciphertext);
+
 	}
 
 	return 0;

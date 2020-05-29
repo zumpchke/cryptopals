@@ -16,3 +16,6 @@ vector<uint8_t> get_random_bytes(size_t sz);
 int encrypt_ecb_cbc(vector<uint8_t> plaintext, vector<uint8_t>& ciphertext);
 
 int oracle(vector<uint8_t>& ciphertext);
+
+/* Ex 4 */
+int determine_block_size();

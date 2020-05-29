@@ -43,6 +43,45 @@ int run_aes(uint8_t *encrypted_data, size_t sz, uint8_t *plaintext, const unsign
 	return pt_len;
 }
 
+
+/* From SSL */
+int aes_encrypt_ecb(vector<uint8_t>& plaintext, unsigned char *key,
+	vector<uint8_t>& ciphertext)
+{
+	EVP_CIPHER_CTX *ctx;
+
+	ciphertext.reserve(std::max(16, (int) plaintext.size() * 2));
+	int len;
+	int ciphertext_len = 0;
+
+	if (!(ctx = EVP_CIPHER_CTX_new())) {
+		assert(0);
+	}
+
+	const EVP_CIPHER *cipher = EVP_aes_128_ecb();
+	ERR_load_crypto_strings();
+
+	if (EVP_EncryptInit_ex(ctx, cipher, NULL, key, NULL) != 1) {
+		assert(0);
+	}
+
+	if (EVP_EncryptUpdate(ctx, ciphertext.data(), &len, plaintext.data(),
+		plaintext.size()) != 1) {
+		assert(0);
+	}
+	ciphertext_len = len;
+
+	if (EVP_EncryptFinal_ex(ctx, ciphertext.data() + len, &len) != 1) {
+		assert(0);
+	}
+
+	ciphertext_len += len;
+	ciphertext.resize(ciphertext_len);
+
+	return ciphertext_len;
+}
+
+
 #define BLOCK_SIZE	(16)
 void aes_encrypt_block(uint8_t *plaintext, unsigned char *key, uint8_t *output)
 {

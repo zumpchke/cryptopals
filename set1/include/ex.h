@@ -67,6 +67,8 @@ vector<uint8_t> score_chunks(vector<vector<uint8_t>>& chunks);
 
 /* Exercise 7 */
 int run_aes(uint8_t *encrypted_data, size_t sz, uint8_t *plaintext, const unsigned char *key = NULL);
+int aes_encrypt_ecb(vector<uint8_t>& plaintext, unsigned char *key, vector<uint8_t>& ciphertext);
+
 
 /* Exercise 8 */
 int detect_aes(vector<string> data);

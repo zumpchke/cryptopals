@@ -76,6 +76,3 @@ string decrypt_single_byte_xor(string input)
 	}
 	return result[final_chr];
 }
-
-
-
