@@ -81,6 +81,8 @@ int aes_encrypt_ecb(vector<uint8_t>& plaintext, unsigned char *key,
 	ciphertext_len += len;
 	ciphertext.resize(ciphertext_len);
 
+	EVP_CIPHER_CTX_free(ctx);
+
 	return ciphertext_len;
 }
 
