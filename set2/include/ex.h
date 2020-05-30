@@ -19,3 +19,7 @@ int oracle(vector<uint8_t>& ciphertext);
 
 /* Ex 4 */
 int determine_block_size();
+int decrypt_block(unsigned block_size, vector<uint8_t> key,
+	vector<uint8_t>& decoded_bytes, vector<uint8_t>& ciphertext,
+	vector<uint8_t>& input_data);
+

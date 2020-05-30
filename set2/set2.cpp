@@ -2,7 +2,6 @@
 #include <ex.h>
 #include <cassert>
 #include <cstring>
-#include <map>
 
 using namespace std;
 
@@ -97,44 +96,25 @@ int main(int argc, char *argv[])
 		auto bs = determine_block_size();
 		assert(bs == 16);
 
+		vector<uint8_t> decode;
 		vector<uint8_t> decoded_bytes;
 
-		// Decrypt single block
-		for(int i = 0; i < bs; i++) {
-			map<vector<uint8_t>, uint8_t> dict;
-			// Create dictionary
-			for(int j = 0; j < 256; j++) {
-				vector<uint8_t> pfx(bs - 1 - i, 'A');
-				vector<uint8_t> cipher;
-				pfx.insert(pfx.end(), decoded_bytes.begin(),
-					decoded_bytes.end());
-				pfx.push_back((uint8_t)j);
-				assert(pfx.size() == (unsigned)bs);
-				aes_encrypt_ecb(pfx, key.data(), cipher);
-				cipher.resize(bs);
-				dict[cipher] = (uint8_t) j;
-			}
-
-			vector<uint8_t> prefix(bs - 1 - i, 'A');
-			prefix.insert(prefix.end(), decoded_bytes.begin(),
-				decoded_bytes.end());
-			assert(prefix.size() == (unsigned) bs - 1);
-
-			string t(prefix.begin(), prefix.end());
-
-			prefix.insert(prefix.end(), input_data.begin() + i,
-				input_data.end());
-
-			aes_encrypt_ecb(prefix, key.data(), ciphertext);
-			vector<uint8_t> tmp(ciphertext.begin(),
-				ciphertext.begin() + 16);
-			if (dict.find(tmp) != dict.end()) {
-				decoded_bytes.push_back(dict[tmp]);
-				cout << (char) dict[tmp] << "\n";
+		while (decrypt_block(bs, key, decoded_bytes, ciphertext,
+			input_data)) {
+			if (input_data.begin() + bs >= input_data.end()) {
+				input_data.erase(input_data.begin(),
+					input_data.end());
 			} else {
-				assert(0);
+				input_data.erase(input_data.begin(),
+					input_data.begin() + bs);
 			}
+			ciphertext.clear();
+			std::copy(decoded_bytes.begin(), decoded_bytes.end(),
+				back_inserter(decode));
+			decoded_bytes.clear();
 		}
+
+		cout << string(decode.begin(), decode.end()) << "\n";
 	}
 
 	return 0;
