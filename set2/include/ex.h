@@ -1,6 +1,7 @@
 #include "../../set1/include/ex.h"
 #include <vector>
 #include <cstdint>
+#include <unordered_map>
 
 using namespace std;
 void pkcs_pad(vector<uint8_t>& data, size_t pad_sz);
@@ -22,4 +23,9 @@ int determine_block_size();
 int decrypt_block(unsigned block_size, vector<uint8_t> key,
 	vector<uint8_t>& decoded_bytes, vector<uint8_t>& ciphertext,
 	vector<uint8_t>& input_data);
+
+/* Ex 5 */
+void split_string(const std::string& str, vector<string>& cont, char delim);
+using cookie = unordered_map<string, string>;
+cookie parse_string(const std::string& str);
 

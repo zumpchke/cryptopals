@@ -117,5 +117,14 @@ int main(int argc, char *argv[])
 		cout << string(decode.begin(), decode.end()) << "\n";
 	}
 
+	{
+
+		string test{"foo=bar&baz=qux&zap=zazzle"};
+		auto out = parse_string(test);
+		for(auto& [k, v] : out) {
+			cout << k << " " << v << "\n";
+		}
+	}
+
 	return 0;
 }
