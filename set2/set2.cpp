@@ -118,12 +118,36 @@ int main(int argc, char *argv[])
 	}
 
 	{
+		vector<uint8_t> ciphertext;
+		auto key = get_random_bytes(16);
+		key[15] = '\0';
 
-		string test{"foo=bar&baz=qux&zap=zazzle"};
-		auto out = parse_string(test);
-		for(auto& [k, v] : out) {
-			cout << k << " " << v << "\n";
-		}
+		// Get ciphertext for block containing admin + padding.
+		// This is going to replace the last block.
+		string prefix{"xxxxxxxxxx"}; // FIXME ehh
+		string tmp{"admin"};
+		vector<uint8_t> admin(tmp.begin(), tmp.end());
+		pkcs_pad(admin, 16);
+
+		prefix.insert(prefix.end(), admin.begin(), admin.end());
+
+		auto profile = profile_for(prefix);
+		encrypt_profile(cookie2str(profile), key, ciphertext);
+
+		auto hacked_profile_str =
+			cookie2str(profile_for("fooxx@bar.com"));
+		vector<uint8_t> cipher_tmp;
+		encrypt_profile(hacked_profile_str, key, cipher_tmp);
+
+		// Replace last block of first encryption with second block
+		// of second
+
+		assert(cipher_tmp.size() == 48);
+		copy(ciphertext.begin() + 16,
+			ciphertext.begin() + 32, cipher_tmp.begin() + 32);
+
+		auto c = decrypt_profile(cipher_tmp, key);
+		assert(c.at("role") == "admin");
 	}
 
 	return 0;
