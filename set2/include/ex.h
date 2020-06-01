@@ -37,4 +37,5 @@ void encrypt_profile(const string& profile, vector<uint8_t>& key,
 		vector<uint8_t>& output);
 cookie decrypt_profile(vector<uint8_t> ciphertext, vector<uint8_t>& key);
 
-
+/* Ex 7 */
+int valid_pkcs(vector<uint8_t>& plaintext);

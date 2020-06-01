@@ -117,6 +117,7 @@ int main(int argc, char *argv[])
 		cout << string(decode.begin(), decode.end()) << "\n";
 	}
 
+	// Ex 5
 	{
 		vector<uint8_t> ciphertext;
 		auto key = get_random_bytes(16);
@@ -148,6 +149,31 @@ int main(int argc, char *argv[])
 
 		auto c = decrypt_profile(cipher_tmp, key);
 		assert(c.at("role") == "admin");
+	}
+
+	// Ex 6 : TODO
+	//
+
+
+	// Ex 7
+	{
+		{
+			string t{"ICE ICE BABY\04\04\04\04"};
+			vector<uint8_t> v(t.begin(), t.end());
+			assert(valid_pkcs(v));
+		}
+
+		{
+			string t{"ICE ICE BABY\05\05\05\05"};
+			vector<uint8_t> v(t.begin(), t.end());
+			assert(!valid_pkcs(v));
+		}
+
+		{
+			string t{"ICE ICE BABY\01\02\03\04"};
+			vector<uint8_t> v(t.begin(), t.end());
+			assert(!valid_pkcs(v));
+		}
 	}
 
 	return 0;
