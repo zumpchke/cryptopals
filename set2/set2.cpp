@@ -176,5 +176,38 @@ int main(int argc, char *argv[])
 		}
 	}
 
+	// Ex 8
+
+	{
+		auto key = get_random_bytes(16);
+		key[15] = '\0';
+
+		auto evil_vec = generate_bad_input();
+		string evil_str(evil_vec.begin(), evil_vec.end());
+
+		auto result = transform_string(evil_str);
+
+		vector<uint8_t> data(result.begin(), result.end());
+
+		// Encrypt under random key
+		uint8_t iv[16] = {0};
+		vector<uint8_t> ciphertext;
+
+		aes_cbc_encrypt(data, data.size(), ciphertext,
+			(const char *) key.data(), iv);
+
+		ciphertext[32] ^= 'B' ^ ';';
+		ciphertext[38] ^= 'C' ^ '=';
+
+		vector<uint8_t> test_result;
+		aes_cbc_decrypt(ciphertext, ciphertext.size(), test_result,
+			(const char *) key.data(), iv);
+
+		string res(test_result.begin(), test_result.end());
+
+		assert(res.find(";admin=true") != string::npos);
+
+	}
+
 	return 0;
 }

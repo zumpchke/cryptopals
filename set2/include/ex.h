@@ -39,3 +39,7 @@ cookie decrypt_profile(vector<uint8_t> ciphertext, vector<uint8_t>& key);
 
 /* Ex 7 */
 int valid_pkcs(vector<uint8_t>& plaintext);
+
+/* Ex 9 */
+string transform_string(string input);
+vector<uint8_t> generate_bad_input();
