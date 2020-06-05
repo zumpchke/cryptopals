@@ -1,9 +1,12 @@
+#ifndef __ex2__
+#define __ex2__
 #include "../../set1/include/ex.h"
 #include <vector>
 #include <cstdint>
 #include <map>
 
-#define DUMP_VEC_HEX(x)	do { for(auto& v: x)cout << int(v) << " "; cout << "\n"; } while (0)
+#define DUMP_VEC_HEX(x)	do { for(auto& v: x)cout << int(v) << "\t"; cout << "\n"; } while (0)
+#define DUMP_VEC_CHAR(x)do { for(auto& v: x)cout << char(v) << "\t"; cout << "\n"; } while (0)
 
 using namespace std;
 void pkcs_pad(vector<uint8_t>& data, size_t pad_sz);
@@ -43,3 +46,4 @@ int valid_pkcs(vector<uint8_t>& plaintext);
 /* Ex 9 */
 string transform_string(string input);
 vector<uint8_t> generate_bad_input();
+#endif

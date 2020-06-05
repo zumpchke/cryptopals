@@ -26,6 +26,7 @@ int aes_cbc_encrypt(vector<uint8_t> plaintext, size_t sz,
 	unsigned int working_size = 0;
 	if (plaintext.size() % BLOCK_SIZE == 0) {
 		pkcs_pad(plaintext, plaintext.size() + BLOCK_SIZE);
+		working_size = plaintext.size();
 	} else {
 		working_size = (plaintext.size() +
 			(BLOCK_SIZE - 1)) & ~(BLOCK_SIZE - 1);
@@ -55,9 +56,9 @@ int aes_cbc_encrypt(vector<uint8_t> plaintext, size_t sz,
 int aes_cbc_decrypt(vector<uint8_t>& ciphertext, size_t sz,
 	vector<uint8_t>& plaintext, const char *key, uint8_t *iv)
 {
-	assert(ciphertext.size() % BLOCK_SIZE == 0);
+	assert(sz % BLOCK_SIZE == 0);
 
-	plaintext.resize(ciphertext.size());
+	plaintext.resize(sz);
 
 	vector<uint8_t>::iterator start, output_start, iv_start;
 	unsigned int i = 0;
@@ -73,9 +74,13 @@ int aes_cbc_decrypt(vector<uint8_t>& ciphertext, size_t sz,
 		xor_block(output_start, i == 0 ? iv : &(*iv_start));
 	}
 	auto pad = int(plaintext.back());
-	assert(pad < BLOCK_SIZE);
 
-	plaintext.resize(ciphertext.size() - pad);
+	// For Set 3 Ex 1
 
-	return 0;
+	auto valid = valid_pkcs(plaintext);
+	if (valid) {
+		plaintext.resize(ciphertext.size() - pad);
+	}
+
+	return valid;
 }

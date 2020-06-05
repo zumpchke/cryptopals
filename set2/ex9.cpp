@@ -10,7 +10,7 @@ string transform_string(string input)
 vector<uint8_t> generate_bad_input()
 {
 	vector<uint8_t> empty_block(16, 'A');
-	
+
 	// B = 32, C = 38
 	string bad_text = "BadminCtrue\5\5\5\5\5";
 	vector<uint8_t> output;

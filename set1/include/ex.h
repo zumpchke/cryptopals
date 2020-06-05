@@ -1,3 +1,7 @@
+#ifndef __ex1__
+
+#define __ex1__
+
 #include <string>
 #include <cstdint>
 #include <cstddef>
@@ -41,6 +45,9 @@ T inline read_file(string filename)
 			string line;
 			getline(f, line);
 
+			if (line.size() == 0) {
+				continue;
+			}
 			if constexpr(std::is_same_v<T, std::string>) {
 				res += line;
 			} else if constexpr(std::is_same_v<T, vector<std::string>>) {
@@ -75,3 +82,4 @@ int detect_aes(vector<string> data);
 void aes_encrypt_block(uint8_t *plaintext, unsigned char *key, uint8_t *output);
 void aes_decrypt_block(uint8_t *ciphertext, unsigned char *key, uint8_t *output);
 
+#endif

@@ -3,11 +3,10 @@
 int valid_pkcs(vector<uint8_t>& plaintext)
 {
 	// FIXME
-	assert(plaintext.size() == 16);
 
 	auto last = plaintext.end() - 1;
 
-	if (*last > 15) {
+	if (*last > 16 || *last == 0) {
 		return 0;
 	}
 
