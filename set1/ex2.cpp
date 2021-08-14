@@ -1,6 +1,7 @@
 #include <iostream>
 #include <ex.h>
 #include <cassert>
+#include <cstring>
 
 void fixed_xor(string buf1, string buf2) {
 
