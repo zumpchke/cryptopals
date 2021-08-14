@@ -1,7 +1,7 @@
 #include <random>
 #include <algorithm>
 #include <ex.h>
-#include <experimental/random>
+#include <random>
 #include <set>
 
 #define BLOCK_SIZE	(16)
@@ -55,7 +55,7 @@ int encrypt_ecb_cbc(vector<uint8_t> plaintext, vector<uint8_t>& ciphertext)
 	plaintext.insert(plaintext.begin(), pre_data.begin(), pre_data.end());
 	plaintext.insert(plaintext.end(), post_data.begin(), post_data.end());
 
-	auto rand = std::experimental::randint(0, 1);
+	auto rand = std::rand() % 2;
 	if (rand == 0) {
 		/* ECB */
 		aes_cbc_encrypt(plaintext, plaintext.size(), ciphertext,

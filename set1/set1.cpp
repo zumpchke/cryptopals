@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
 {
 	/* Ex 1 */
 	assert(strlen(input_str) % 2 == 0);
-	uint8_t bytes[(strlen(input_str)/2) + 1] = {0};
+	uint8_t *bytes = (uint8_t *) alloca((strlen(input_str)/2 + 1)* sizeof(uint8_t));
 	for(unsigned int j = 2; j <= strlen(input_str); j += 2) {
 		string b64 = convert_to_b64((const char *)input_str, j, (uint8_t *)bytes);
 		assert(b64 == test_strs[j / 2 - 1]);
@@ -38,8 +38,8 @@ int main(int argc, char *argv[])
 	const char *test1 = "Burning 'em, if you ain't quick and nimble"
 	"\nI go crazy when I hear a cymbal";
 
-	uint8_t tmp1[strlen(test1)] = {0};
-	uint8_t hex1[strlen(test1)*2] = {0};
+	uint8_t *tmp1 = (uint8_t *) alloca(strlen(test1)*sizeof(uint8_t));
+	uint8_t *hex1 = (uint8_t *) alloca(strlen(test1)*2*sizeof(uint8_t));
 
 	const char *exp1 = "0b3637272a2b2e63622c2e69692a23693a2a3c6324202d623"
 	"d63343c2a26226324272765272a282b2f20430a652e2c652a3124333a653"
@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
 		assert(c == 37);
 
 		string key_data = read_file<std::string>("set1/data/q6.txt");
-		uint8_t key_bytes[key_data.size()] = {0};
+		uint8_t *key_bytes = (uint8_t *) alloca(key_data.size()*sizeof(uint8_t));
 		auto data_len = b64_to_bytes(key_data.c_str(), key_data.size(), key_bytes);
 		int key_size = get_key_size(key_bytes, data_len);
 		assert(key_size == 29);
@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
 		assert(chunks[0].size() == (unsigned int)key_size);
 		vector<uint8_t> key = score_chunks(transposed_chunks);
 
-		uint8_t output[data_len] = {0};
+		uint8_t *output = (uint8_t *) alloca(data_len*sizeof(uint8_t));
 		repeating_xor(key_bytes, data_len, (const char *) key.data(), key_size, output);
 
 		for(int i = 0; i < data_len; i++) {
@@ -81,9 +81,10 @@ int main(int argc, char *argv[])
 	/* Ex 7 */
 	{
 		string data = read_file<std::string>("set1/data/q7.txt");
-		uint8_t output[data.size()] = {0};
+		uint8_t *output = (uint8_t *) alloca(data.size()*sizeof(uint8_t));
 		int data_len = b64_to_bytes(data.c_str(), data.size(), output);
-		uint8_t pt[data_len + 1024] = {0};
+
+		uint8_t *pt = (uint8_t *) alloca((data_len + 1024)* sizeof(uint8_t));
 
 		run_aes(output, data_len + 1, pt);
 	}

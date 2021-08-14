@@ -50,7 +50,7 @@ double score_string(unsigned char *arr, size_t sz)
 string decrypt_single_byte_xor(string input)
 {
 	auto n = input.size();
-	uint8_t bytes[n/2] = {0};
+	uint8_t *bytes = (uint8_t *)alloca(n/2*sizeof(uint8_t));
 	unsigned char final_chr = 0;
 
 	hex_to_bytes(input.c_str(), n, bytes);

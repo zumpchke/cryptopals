@@ -1,6 +1,6 @@
 #include <iostream>
 #include <ex.h>
-#include <experimental/random>
+#include <random>
 
 int main(int argc, char *argv[])
 {
@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
 		auto key = get_random_bytes(16);
 		key[15] = '\0';
 
-		auto rand = std::experimental::randint(0, 10);
+		auto rand = std::rand() % 10 + 1;
 
 		vector<uint8_t> ciphertext;
 		uint8_t iv[16] = {0};
